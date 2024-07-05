@@ -1,0 +1,136 @@
+<html>
+  <head>
+    <title>Assignment 2</title>
+    <script>
+      let items = [];
+
+      function chooseItem(item, price) {
+        document.getElementById('item').textContent = item;
+        document.getElementById('price').textContent = price.toFixed(2);
+        document.getElementById('qty').value = 1;
+      }
+
+      function itemAddUpdate() {
+        let item = document.getElementById('item').textContent;
+        let price = parseFloat(document.getElementById('price').textContent);
+        let qty = parseInt(document.getElementById('qty').value);
+
+        if (item === '...' || isNaN(price) || isNaN(qty) || qty <= 0) {
+          alert('Please select an item from the list!!');
+          return;
+        }
+
+        let found = false;
+        for (let i = 0; i < items.length; i++) {
+          if (items[i].item === item) {
+            items[i].qty = qty;
+            items[i].total = price * qty;
+            found = true;
+            break;
+          }
+        }
+
+        if (!found) {
+          items.push({ item: item, price: price, qty: qty, total: price * qty });
+        }
+
+        updateTable();
+      }
+
+      function itemDelete(item) {
+        items = items.filter(i => i.item !== item);
+        updateTable();
+      }
+
+      function updateTable() {
+        let table = document.getElementById('thetable');
+        let totalRow = document.getElementById('total');
+        let addRow = document.getElementById('add');
+
+        while (table.rows.length > 3) {
+          table.deleteRow(1);
+        }
+
+        let total = 0;
+        for (let i = 0; i < items.length; i++) {
+          let row = table.insertRow(1 + i);
+          row.insertCell(0).innerHTML = items[i].item + ' - <a href="javascript:itemDelete(\'' + items[i].item + '\');">Delete</a>';
+          row.insertCell(1).innerHTML = items[i].price.toFixed(2);
+          row.insertCell(2).innerHTML = items[i].qty;
+          row.insertCell(3).innerHTML = items[i].total.toFixed(2);
+          total += items[i].total;
+        }
+
+        document.getElementById('totalpay').textContent = total.toFixed(2);
+      }
+    </script>
+  </head>
+
+  <body>
+    <div style="float:left;">
+      <img src="menu.gif" width="500" height="487" alt="Planets" usemap="#menumap">
+    </div>
+
+    <div style="float:left;">
+      <table border="1" width="480px" id="thetable">
+        <tr><th colspan="4">Order Form</th></tr>
+        <tr>
+          <th>Item</th>
+          <th>Price</th>
+          <th>Qty</th>
+          <th>Qty * Price</th>
+        </tr>
+
+        <tr id="total">
+          <th colspan="3" align="right"><b>TOTAL (RM)</b></th>
+          <th id="totalpay" align="right">0.00</th>
+        </tr>
+
+        <tr id="add">
+          <td id="item">...</td>
+          <td id="price" align="right">...</td>
+          <td align="center"><input type="text" id="qty" size="3" style="text-align:right;"></td>
+          <td align="center"><input type="button" value="Add/Update" onclick="itemAddUpdate();"></td>
+        </tr>
+      </table>
+    </div>
+    <div style="float:left;">
+      <pre>
+        Group Members:
+        1. Anatasya Humaira
+        2. Awfan Alfa Vinandry
+      </pre>
+    </div>
+
+    <map name="menumap">
+      <area shape="rect" coords="0,138,23,154" alt="Chicken Burger"
+            href="javascript: chooseItem('Chicken Burger', 8.8);" >
+      <area shape="rect" coords="128,138,147,154" alt="Hotouch Burger"
+            href="javascript: chooseItem('Hotouch Burger', 11.1);" >
+      <area shape="rect" coords="252,138,272,154" alt="Tower Burger"
+            href="javascript: chooseItem('Tower Burger', 13.8);" >
+      <area shape="rect" coords="378,138,395,154" alt="Fish Fillet Burger"
+            href="javascript: chooseItem('Fish Fillet Burger', 11.25);" >
+
+      <area shape="rect" coords="0,282,23,298" alt="Lucky Plate"
+            href="javascript: chooseItem('Lucky Plate', 11.90);" >
+      <area shape="rect" coords="128,282,147,298" alt="Chick-A-Licious"
+            href="javascript: chooseItem('Chick-A-Licious', 13.30);" >
+      <area shape="rect" coords="252,282,272,298" alt="Chick-A-Mix"
+            href="javascript: chooseItem('Chick-A-Mix', 11.90);" >
+      <area shape="rect" coords="377,282,395,298" alt="Fish 'n' Chip"
+            href="javascript: chooseItem('Fish \'n\' Chip', 13.90);" >
+
+      <area shape="rect" coords="0,430,23,446" alt="Nasi Marrybrown"
+            href="javascript: chooseItem('Nasi Marrybrown', 9.90);" >
+      <area shape="rect" coords="128,430,147,446" alt="Nasi Ayam MB"
+            href="javascript: chooseItem('Nasi Ayam MB', 10.30);" >
+      <area shape="rect" coords="252,430,272,446" alt="Mi Kari MB"
+            href="javascript: chooseItem('Mi Kari MB', 9.50);" >
+      <area shape="rect" coords="335,430,354,446" alt="Chicken Porridge"
+            href="javascript: chooseItem('Chicken Porridge', 6.50);" >
+      <area shape="rect" coords="418,430,436,446" alt="Seafood Porridge"
+            href="javascript: chooseItem('Seafood Porridge', 7.50);" >
+    </map>
+  </body>
+</html>
